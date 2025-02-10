@@ -6,18 +6,17 @@ from peft import PeftModel
 x_device = ""
 if torch.cuda.is_available():
     print("CUDA is available. Using GPU.")
-    x_device = torch.device("cuda")
+    x_device = "cuda"
 else:
     if torch.mps.is_available():
         print("Apple MPS is available. Using MPS.")
-        x_device = torch.device("mps")
+        x_device = "mps"
     else:
-        x_device = torch.device("cpu")
+        x_device = "cpu"
 
 def predict(messages, model, tokenizer):
-    device = "mps"
     text = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
-    model_inputs = tokenizer([text], return_tensors="pt").to(device)
+    model_inputs = tokenizer([text], return_tensors="pt").to(x_device)
 
     #model.generation_config.do_sample=False
     #model.generation_config.temperature=None
@@ -38,7 +37,7 @@ tokenizer = AutoTokenizer.from_pretrained("./models/Qwen/Qwen2.5-0.5B-Instruct/"
 model = AutoModelForCausalLM.from_pretrained("./models/Qwen/Qwen2.5-0.5B-Instruct/", device_map="auto", torch_dtype=torch.bfloat16)
 
 # 加载训练好的Lora模型，将下面的checkpoint-[XXX]替换为实际的checkpoint文件名名称
-model = PeftModel.from_pretrained(model, model_id="./output/Qwen2.5/checkpoint-62")
+model = PeftModel.from_pretrained(model, model_id="./output/Qwen2.5/checkpoint-500")
 
 test_texts = {
     'instruction': "你是一个文本分类领域的专家，你会接收到一段文本和几个潜在的分类选项，请输出文本内容的正确类型",
