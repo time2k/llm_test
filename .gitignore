@@ -5,3 +5,4 @@ pkg/
 ._____temp
 output/
 models/
+raw_dataset/
