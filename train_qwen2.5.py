@@ -26,6 +26,8 @@ else:
     else:
         x_device = "cpu"
 
+model_path = "./models/Qwen/Qwen2.5-0.5B-Instruct/"
+output_dir = f'./output/Qwen2.5/'
 
 def predict(messages, model, tokenizer):
     text = tokenizer.apply_chat_template(
@@ -58,10 +60,12 @@ def predict(messages, model, tokenizer):
 
 # Transformers加载模型权重
 tokenizer = AutoTokenizer.from_pretrained(
-    "./models/Qwen/Qwen2.5-0.5B-Instruct/", use_fast=False, trust_remote_code=True
+    model_path, use_fast=False, trust_remote_code=True
 )
+tokenizer.pad_token = tokenizer.eos_token
+
 model = AutoModelForCausalLM.from_pretrained(
-    "./models/Qwen/Qwen2.5-0.5B-Instruct/", device_map="auto", torch_dtype=torch.bfloat16
+    model_path, device_map="auto", torch_dtype=torch.bfloat16, use_cache=False
 )
 model.enable_input_require_grads()  # 开启梯度检查点时，要执行该方法
 
@@ -86,9 +90,11 @@ config = LoraConfig(
 
 model = get_peft_model(model, config)
 #model = model.bfloat16()
+model.print_trainable_parameters()
+
 
 args = TrainingArguments(
-    output_dir="./output/Qwen2.5",
+    output_dir=output_dir,
     per_device_train_batch_size=4,
     gradient_accumulation_steps=4,
     logging_steps=10,

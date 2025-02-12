@@ -3,5 +3,8 @@ pkg/
 .vscode
 */.DS_Store
 ._____temp
-output/
-models/
+output/*
+output_lora/*
+output_merge/*
+output_gguf/*
+models/*
