@@ -10,3 +10,4 @@ output_lora/*
 output_merge/*
 output_gguf/*
 models/*
+swanlog/*
