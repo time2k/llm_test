@@ -2,7 +2,7 @@ import json
 import pandas as pd
 from datasets import Dataset
 from transformers import AutoTokenizer
-from modelscope import snapshot_download
+from modelscope import snapshot_download,MsDataset
 import os
 
 def dataset_jsonl_transfer(origin_path, new_path):
