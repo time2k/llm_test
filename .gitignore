@@ -4,7 +4,6 @@ pkg/
 */.DS_Store
 ._____temp
 raw_dataset/*
-dataset/*
 output/*
 output_lora/*
 output_merge/*
